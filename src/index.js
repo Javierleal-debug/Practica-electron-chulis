@@ -6,9 +6,12 @@ const path = require('path');
 
 if(process.env.NODE_ENV !== 'production'){
    require('electron-reload')(__dirname, {
+electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
+    });
+
    
-    })
-}
+};
+
 
 let mainWindow
 
@@ -25,7 +28,14 @@ app.on('ready', ()=>{
 
    const mainMenu= Menu.buildFromTemplate(templateMenu);
    Menu.setApplicationMenu(mainMenu);
+
+   mainWindow.on('closed', ()=>{
+      app.quit();
+   });
+   
 });
+
+
 
 function createNewProductWindow(){
    newProductWindow= new BrowserWindow({
@@ -40,6 +50,11 @@ function createNewProductWindow(){
       slashes: true
 
  }))
+
+ newProductWindow.on('closed', ()=>{
+   app.quit();
+   });
+
 
 }
 
