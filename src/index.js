@@ -22,7 +22,7 @@ app.on('ready', ()=>{
         pathname: path.join(__dirname,'views/index.html'),
         protocol: 'file',
         slashes: true
-
+ 
    }))
 
 
@@ -50,12 +50,28 @@ function createNewProductWindow(){
       slashes: true
 
  }))
-
- newProductWindow.on('closed', ()=>{
-   app.quit();
+   newProductWindow.on('closed', ()=>{
+      newProductWindow = null;
    });
+}
 
+function createPriceListWindow(){
+   priceListWindow= new BrowserWindow({
+      width: 400,
+      height: 330,
+      title:'Lista de precios'
+   });
+   priceListWindow.setMenu(null);
+   priceListWindow.loadURL(url.format({
+      pathname: path.join(__dirname,'views/price-list.html'),
+      protocol: 'file',
+      slashes: true
 
+ }))
+
+ priceListWindow.on('closed', ()=>{
+   priceListWindow = null;
+   });
 }
 
 
@@ -75,7 +91,7 @@ const templateMenu = [
             label: 'Lista de Precios',
             accelerator: 'Ctrl+P',
             click(){
-               createNewProductWindow();
+               createPriceListWindow();
             }
          }
 
