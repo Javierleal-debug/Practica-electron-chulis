@@ -39,8 +39,8 @@ app.on('ready', ()=>{
 
 function createNewProductWindow(){
    newProductWindow= new BrowserWindow({
-      width: 400,
-      height: 330,
+      width: 600,
+      height: 600,
       title:'Nuevo Producto'
    });
    newProductWindow.setMenu(null);
@@ -92,6 +92,13 @@ const templateMenu = [
             accelerator: 'Ctrl+P',
             click(){
                createPriceListWindow();
+            }
+         },
+         {
+            label: 'Salir',
+            accelerator: 'Ctrl+Q',
+            click(){
+               app.quit();
             }
          }
 
