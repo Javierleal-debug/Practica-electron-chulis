@@ -42,16 +42,27 @@
     </form>
 
     
+
+    
     <script>
+
+         const {ipcRenderer} = require ('electron');
+
 
         const form = document.querySelector('form');
         form.addEventListener('submit', event =>{
             const nameProduct = document.querySelector('#nombre').value;
             const priceProduct = document.querySelector('#precio').value;
             const typeProduct = document.querySelector('#tipo').value;
+             const newProduct = {
+                name: nameProduct,
+                price: priceProduct,
+                type: typeProduct
+             };
+            ipcRenderer.send('product:new', newProduct);
+            //console.log(newProduct);
 
-            alert(`Agregaste: ${typeProduct} ${nameProduct} $${priceProduct}!!`);
-            app.close();
+            event.preventDefault();
         
         
         });

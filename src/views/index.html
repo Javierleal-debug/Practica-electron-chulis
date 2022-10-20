@@ -8,16 +8,20 @@
     <link rel="stylesheet" href="https://bootswatch.com/5/journal/bootstrap.min.css">
 </head>
 <body>
-    <h1>hola miamor</h1>
+    <h1></h1>
 
     <div class="container p-4">
         <div id="products" class="row"></div>
     </div>
 
     <script>
-        const electron = require('electron');
-
+        const {ipcRenderer} = require('electron');
+        
         const products = document.querySelector('#products');
+
+        ipcRenderer.on('product:new',(event, newProduct)=>{
+            console.log(newProduct);
+        });
 
 
 

@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu } = require('electron');
+const {app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 const url = require('url');
 
@@ -12,17 +12,23 @@ electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
    
 };
 
-
 let mainWindow
 
 
 app.on('ready', ()=>{
-   mainWindow= new BrowserWindow({});
+   mainWindow= new BrowserWindow({
+      width: 100,
+      height: 600,
+      webPreferences: {
+         nodeIntegration: true,
+         contextIsolation: false,
+         enableRemoteModule: true,
+       }
+   });
    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname,'views/index.html'),
-        protocol: 'file',
-        slashes: true
- 
+      pathname: path.join(__dirname,'views/index.html'),
+      protocol: 'file',
+      slashes: true, 
    }))
 
 
@@ -37,13 +43,20 @@ app.on('ready', ()=>{
 
 
 
+
+
 function createNewProductWindow(){
    newProductWindow= new BrowserWindow({
       width: 600,
       height: 600,
-      title:'Nuevo Producto'
+      title:'Nuevo Producto',
+      webPreferences: {
+         nodeIntegration: true,
+         contextIsolation: false,
+         enableRemoteModule: true,
+       }
    });
-   newProductWindow.setMenu(null);
+   //newProductWindow.setMenu(null);
    newProductWindow.loadURL(url.format({
       pathname: path.join(__dirname,'views/add-product.html'),
       protocol: 'file',
@@ -61,7 +74,7 @@ function createPriceListWindow(){
       height: 330,
       title:'Lista de precios'
    });
-   priceListWindow.setMenu(null);
+   //priceListWindow.setMenu(null);
    priceListWindow.loadURL(url.format({
       pathname: path.join(__dirname,'views/price-list.html'),
       protocol: 'file',
@@ -74,7 +87,11 @@ function createPriceListWindow(){
    });
 }
 
-
+ipcMain.on('product:new',(event, newProduct) =>{
+   console.log(newProduct);
+   mainWindow.webContents.send('product:new',newProduct);
+   newProductWindow.close();
+});
 
 const templateMenu = [
    {
@@ -106,3 +123,22 @@ const templateMenu = [
    }
 
 ];
+
+if(process.env.NODE_ENV !== 'production'){
+   templateMenu.push({
+      label:'DevTools',
+      submenu:[
+      {
+         label:'Show/Hide DevTools',
+         click(item, focusedWindow){
+            focusedWindow.toggleDevTools();
+         }
+      },
+
+      {
+         role: 'reload'
+      } 
+
+      ]
+   })
+}
